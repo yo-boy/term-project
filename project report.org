@@ -1,0 +1,39 @@
+#+TITLE: CMPE 351 Term Project
+#+AUTHOR: Abdelrahman Abdin
+#+OPTIONS: author
+#+OPTIONS: \n
+#+OPTIONS: date
+#+OPTIONS: toc:nil
+#+OPTIONS: num:nil
+#+LATEX_HEADER: \pagenumbering{gobble}
+#+LaTeX_HEADER: \usepackage{indentfirst}
+
+* What do we do?
+We run a streaming platform, our platform allows anyone setup an account and stream audio and video to their followers and allows those followers to interact with the streamer, our main revenue source is the cut of donations we take from what the viewers give to streamers.
+
+* Main database
+For our database we have a few tables, one table for user accounts, one table that holds past streams, one table that holds donations, there is no distinction between 'viewer' accounts and 'streamer' accounts, one table that keeps track of which accounts are viewing which streams, one table that holds the chat messages of viewers for each stream, and one table that holds the categories of streams.
+\newline
+\newline
+For our relations there are:
+ - Any user can donate to any other user many times.
+ - Each stream is only owned by one account that created it and each account can have many streams.
+ - Any account can follow any other number of accounts and be followed by any other number of accounts.
+ - Each stream can only have one category and each category can have many streams.
+ - Each stream can be viewed by many accounts and each account can view many streams at the same time.
+
+* ER diagram
+[[./term project diagram.png]]
+
+* Keys and Cardinalities
+Primary keys:
+ * The Account entity uses the AccountID as a primary key.
+ * Streams use a StreamID as a primary key.
+ * Categories use their name as the primary key.
+ 
+Cardinality:
+ * Follows is a partial Many to Many relationship.
+ * Donation is a partial Many to Many relationship.
+ * Creates is a partial One to One relationship.
+ * Watches is a partial Many to Many relationship.
+ * Belongs to is a total One to One relationship.
