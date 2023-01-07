@@ -25,15 +25,78 @@ For our relations there are:
 * ER diagram
 [[./term project diagram.png]]
 
+* Snapshot
+** Account Table
+|---+-------------+------------------------+---------|
+|   | _Name_      | E-mail                 | Balance |
+|---+-------------+------------------------+---------|
+| / | <>          | <>                     |      <> |
+|   | abu-khalil  | abu-khalil@gmail.com   |     200 |
+|   | XxXgamerXxX | gamer@yahoo.com        |       5 |
+|   | Tom123      | tom@tom.email          |    2005 |
+|   | John        | john-jhonson@gmail.com |     100 |
+|   | XQC         | email@xqc.org          |    5500 |
+|---+-------------+------------------------+---------|
+** Stream table
+|---+------------+------------+----------+---------+----------------|
+|   | _StreamID_ | AName      |   Length | Viewers | Category       |
+|---+------------+------------+----------+---------+----------------|
+| / |         <> | <>         |       <> |      <> | <>             |
+|   |          1 | abu-khalil | 03:28:10 |       2 | Valorant       |
+|   |          2 | Tom123     | 00:30:28 |       4 | Just chatting  |
+|   |          3 | XQC        | 15:48:02 |      10 | Counter Strike |
+|---+------------+------------+----------+---------+----------------|
+** Follow Table
+|---+-------------+------------|
+|   | _Follower_  | _Reciever_ |
+|---+-------------+------------|
+| / | <>          | <>         |
+|   | Abu-khalil  | Tom123     |
+|   | Tom123      | XQC        |
+|   | John        | XQC        |
+|   | XQC         | Abu-khalil |
+|   | Tom123      | Abu-khalil |
+|---+-------------+------------|
+** Donation Table
+|---+--------------+------------+----------+--------+-----------------|
+|   | _DonationID_ | Donator    | Reciever | Amount | Date            |
+|---+--------------+------------+----------+--------+-----------------|
+| / |           <> | <>         | <>       |     <> | <>              |
+|   |            1 | Abu-khalil | Tom123   |     32 | 1/1/2023, 23:10 |
+|   |            2 | John       | XQC      |     12 | 2/4/2022, 10:30 |
+|   |            3 | Abu-khalil | XQC      |    500 | 7/1/2023, 22:47 |
+|---+--------------+------------+----------+--------+-----------------|
+** Watch Table
+|---+------------+------------|
+|   | _AName_    | _StreamID_ |
+|---+------------+------------|
+| / | <>         |         <> |
+|   | Abu-khalil |          1 |
+|   | John       |          2 |
+|   | Tom123     |          3 |
+|   | John       |          3 |
+|---+------------+------------|
+** Chat Table
+|---+-------+------------+----------+-------------|
+|   | _MID_ | AName      | StreamID | Message     |
+|---+-------+------------+----------+-------------|
+| / |    <> | <>         |       <> | <>          |
+|   |     1 | John       |        2 | lol         |
+|   |     2 | John       |        2 | that's true |
+|   |     3 | John       |        3 | no          |
+|   |     4 | Abu-khalil |        1 | haha        |
+|---+-------+------------+----------+-------------|
+
 * Keys and Cardinalities
 Primary keys:
- * The Account entity uses the AccountID as a primary key.
+ * The Account entity uses the Name as a primary key.
  * Streams use a StreamID as a primary key.
- * Categories use their name as the primary key.
  
 Cardinality:
  * Follows is a partial Many to Many relationship.
  * Donation is a partial Many to Many relationship.
- * Creates is a partial One to One relationship.
+ * Creates is a partial One to Many relationship.
  * Watches is a partial Many to Many relationship.
- * Belongs to is a total One to One relationship.
+
+* Normalization
+First we get rid of the multi value attribute (chat messages) by moving it to a seperate table and then we implement the Follows relation using a seperate table to avoid redundancy, and we do the same for donations and give them a DonationID since the relation does not have any clear candidate keys and eliminate any extra functional dependincies, we also implement the Watches relationship explicitly in a seperate table instead of implicitly in the stream table to assure 4th normal form.
