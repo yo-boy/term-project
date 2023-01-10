@@ -68,7 +68,7 @@ def addRecord():
         data.append(session.prompt("enter " + column + ": "))
     print(string)
     mycursor.execute(string, data)
-    mycursor.execute("select * from "+ table+ ";")
+    mycursor.execute("select * from "+ table + ";")
     print(mycursor.fetchall())
 
     
