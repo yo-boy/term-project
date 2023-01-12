@@ -2,7 +2,6 @@ from prompt_toolkit import PromptSession
 # Create prompt object.
 session = PromptSession()
 
-
 import mysql.connector
 #setup local mysql database
 mydb = mysql.connector.connect(
@@ -101,7 +100,7 @@ def executeSQL():
     
 def showMenu():
     print("\nChoose operation: ")
-    print("\n1: list records\n2: add a record\n3: delete a record\n4: execute SQL statement\n")
+    print("\n1: list records\n2: add a record\n3: delete a record\n4: execute SQL statement\n5: exit")
     choice = session.prompt("enter choice: ")
     match choice:
         case "1":
@@ -115,6 +114,8 @@ def showMenu():
             
         case "4":
             executeSQL()
+        case "5":
+            exit()
     showMenu()
 
 showMenu()
