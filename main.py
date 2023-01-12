@@ -34,11 +34,11 @@ def chooseTable():
     for table in tables:
         i += 1
         print(str(i)+ ": " +table['Tables_in_Twitch'])
-    i += 1
-    print(str(i)+ ": exit")
+    #i += 1
+    #print(str(i)+ ": exit")
     choice = session.prompt("\nchoose table: ")
-    if choice == str(i):
-        exit()
+    #if choice == str(i):
+    #    exit()
     return tables[int(choice)-1]['Tables_in_Twitch']
 
 def showRecords():
@@ -100,7 +100,7 @@ def executeSQL():
     
 def showMenu():
     print("\nChoose operation: ")
-    print("\n1: list records\n2: add a record\n3: delete a record\n4: execute SQL statement\n5: exit")
+    print("\n1: list records\n2: add a record\n3: delete a record\n4: execute SQL statement\n5: exit\n")
     choice = session.prompt("enter choice: ")
     match choice:
         case "1":
