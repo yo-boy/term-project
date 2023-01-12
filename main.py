@@ -31,12 +31,13 @@ def chooseTable():
     i = 0
     mycursor.execute("SHOW TABLES;")
     tables = mycursor.fetchall()
+    print()
     for table in tables:
         i += 1
         print(str(i)+ ": " +table['Tables_in_Twitch'])
     i += 1
     print(str(i)+ ": exit")
-    choice = session.prompt("choose table: ")
+    choice = session.prompt("\nchoose table: ")
     if choice == str(i):
         exit()
     return tables[int(choice)-1]['Tables_in_Twitch']
@@ -45,7 +46,10 @@ def showRecords():
     table = chooseTable()
     print("Records of " + table+ ":\n")
     mycursor.execute("SELECT * FROM "+ table + ";")
-    for record in mycursor:
+    contents = mycursor.fetchall()
+    if contents == []:
+        print("table is empty")
+    for record in contents:
         for item in record:
             print(item + ": " + str(record[item]))
         print()
@@ -60,25 +64,57 @@ def addRecord():
         string += column['COLUMN_NAME'] + ", "
     string = string[:-2]
     string += ") VALUES ("
-    tttt = "%s, " * len(columns)
-    tttt = tttt[:-2]
-    string += tttt + ");"
+    temp = "%s, " * len(columns)
+    temp = temp[:-2]
+    string += temp + ");"
     data = []
     for column in columns:
         data.append(session.prompt("enter " + column + ": "))
-    print(string)
     mycursor.execute(string, data)
-    mycursor.execute("select * from "+ table + ";")
-    print(mycursor.fetchall())
 
+
+def deleteRecord():
+    table = chooseTable()
+    print("choose record to delete:\n")
+    mycursor.execute("SELECT * FROM "+ table + ";")
+    i = 1
+    tempRecordArray = []
+    for record in mycursor:
+        tempRecordArray.append(record)
+        print(str(i) + ":")
+        i += 1
+        for item in record:
+            print(item + ": " + str(record[item]))
+        print()
+    choice = session.prompt("choose record to delete: ")
+    temp = tempRecordArray[int(choice)-1]
+    columnToDelete = next(iter(temp))
+    valueToDelete = []
+    valueToDelete.append(tempRecordArray[int(choice)-1][columnToDelete])
+    statement = "DELETE FROM " + table + " WHERE " + columnToDelete + "= %s;"
+    mycursor.execute(statement,valueToDelete)
+    
+def executeSQL():
+    statement = session.prompt("enter SQL statement to execute on database: ")
+    mycursor.execute(statement)
+    print(mycursor.fetchall())
     
 def showMenu():
-    print("1: list records\n2: add records\n")
+    print("\nChoose operation: ")
+    print("\n1: list records\n2: add a record\n3: delete a record\n4: execute SQL statement\n")
     choice = session.prompt("enter choice: ")
     match choice:
-       case "1":
+        case "1":
             showRecords()
-       case "2":
+
+        case "2":
             addRecord()
+
+        case "3":
+            deleteRecord()
+            
+        case "4":
+            executeSQL()
+    showMenu()
 
 showMenu()
